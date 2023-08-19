@@ -1,0 +1,44 @@
+﻿@using Order.Model.Models;
+@model IEnumerable<Product>
+
+<div class="row pb-3">
+    @foreach(var product in Model)
+    {
+        <div class="col-lg-3 col-sm-6">
+            <div class="row p-2">
+                <div class="col-12 p-1">
+                    <div class="card border-0 p-3 shadow border-top border-5 rounded">
+                        @if (product.ProductImages != null && product.ProductImages.Any())
+                        {
+                            if(product.MainImageId != null)
+                            {
+                                <img src="@product.ProductImages.FirstOrDefault(p => p.Id == product.MainImageId)?.ImageUrl" class="card-img-top rounded" />
+                            }
+                            else
+                            {
+                                <img src="@product.ProductImages.FirstOrDefault()?.ImageUrl" class="card-img-top rounded" />
+                            }
+                        }
+                        else
+                        {
+                            <img src="~/images/no-image.png" class="card-img-top rounded" />
+                        }
+                        <div class="pl-1">
+                            <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Name</p>
+                            <p class="card-title text-warning text-center">@product.ShortDescription</p>
+                        </div>
+                        <div class="pl-1">
+                            <p style="color:black" class="text-dark opacity-75 text-center mb-0">Netto @(product.NetPrice)$</p>
+                            <p style="color:red" class="text-center">Brutto @(product.GrossPrice)$</p>
+                        </div>
+                        <div class="text-center">
+                            <a asp-action="Details" asp-route-Id="@product.Id" class="btn btn-primary bg-gradient border-0 form control">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

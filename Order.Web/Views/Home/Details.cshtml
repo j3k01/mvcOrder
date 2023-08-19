@@ -1,0 +1,156 @@
+﻿@using Order.Model.Models;
+@model Product
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <link href="~/Content/ckeditor/ckeditor.css" rel="stylesheet" />
+</head>
+<form method="post">
+    <div class="card shadow border-0 mt-4">
+        <div class="card-header bg-secondary bg-gradient text-light py-4">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h3 class="text-white text-uppercase">@Model.Name</h3>
+                    <p class="text-white-50 fw-semibold mb-0">@Model.ShortDescription</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="py-3">
+                <div class="row">
+                    <div class="col-6 col-md-2 offset-lg-1 pb-1">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary bg-gradient mb-5 fw-semibold btn-sm text-uppercase">
+                            <small>Back to home</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-3 offset-lg-1 text-center mb-3">
+
+                        @if (Model.ProductImages != null && Model.ProductImages.Count > 0)
+                        {
+                            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                                <div class="carousel-indicators">
+                                    @foreach (var image in Model.ProductImages.Select((image, index) => new { ProductImage = image, Index = index }))
+                                    {
+                                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="@image.Index" class="@(image.Index == 0 ? "active" : "")" aria-current="true" aria-label="Slide @image.Index"></button>
+                                    }
+                                </div>
+                                <div class="carousel-inner">
+                                    @foreach (var image in Model.ProductImages.Select((image, index) => new { ProductImage = image, Index = index }))
+                                    {
+                                        <div class="@(image.Index == 0 ? "carousel-item active" : "carousel-item")">
+                                            <div class="d-flex align-items-center justify-content-center" style="height: 500px;">
+                                                <img src="@(image.ProductImage.ImageUrl)" class="d-block w-100" style="max-height: 100%;" alt="...">
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+
+                        }
+
+                    </div>
+                    <div class="col-12 col-lg-6 offset-lg-1">
+                        <div class="col-12 col-md-6 pb-4">
+                            <span class="badge">Category</span>
+                        </div>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50">Name</h6>
+                            <p>@Model.Name</p>
+                        </div>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50">Short Description</h6>
+                            <p>@Model.ShortDescription</p>
+                        </div>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50">Long Description</h6>
+                            <textarea id="LongDescription" name="LongDescription" rows="10" class="form-control" readonly>@Html.Raw(Model.LongDescription)</textarea>
+                        </div>
+                        <br/>
+                        <div class="row ps-2">
+                            <h6 class="text-dark text-opacity-50">Cena netto</h6>
+                            <p>@Model.NetPrice$</p>
+                            <h6 class="text-dark text-opacity-50">Cena brutto</h6>
+                            <p>@Model.GrossPrice$</p>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">Symbol</div>
+                                <p>@Model.Symbol</p>
+                            </div>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">Measure unit</div>
+                                <p>@Model.MeasureUnit</p>
+                            </div>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">Stawka VAT</div>
+                                @{
+                                    string vatRateText;
+                                    switch ((Order.Model.Enums.VATRate)Model.VATRate)
+                                    {
+                                        case Order.Model.Enums.VATRate.NoneVAT:
+                                            vatRateText = "0%";
+                                            break;
+                                        case Order.Model.Enums.VATRate.LowVAT:
+                                            vatRateText = "5%";
+                                            break;
+                                        case Order.Model.Enums.VATRate.MediumVAT:
+                                            vatRateText = "8%";
+                                            break;
+                                        case Order.Model.Enums.VATRate.HugeVAT:
+                                            vatRateText = "23%";
+                                            break;
+                                        default:
+                                            vatRateText = "Nieznany";
+                                            break;
+                                    }
+                                }
+                                <p>@vatRateText</p>
+                            </div>
+                        </div>
+                        <div class="row text-center ps-2">
+                            <div class="p-1 col-3 col-lg-2 bg-white border-bottom">
+                                <div class="text-dark text-opacity-50 fw-semibold">Dostępność</div>
+                                <div class="availability-container">
+                                    @if (@Model.ActiveState == true)
+                                    {
+                                        <p class="availability-text">Dostępny</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="availability-text">Niedostępny</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('LongDescription');
+    </script>
+}

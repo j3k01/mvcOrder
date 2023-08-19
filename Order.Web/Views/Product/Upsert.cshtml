@@ -1,0 +1,164 @@
+﻿@using Order.Model.Models;
+@model Product
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <link href="~/Content/ckeditor/ckeditor.css" rel="stylesheet" />
+</head>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                @if (Model != null && Model.Id != null)
+                {
+                    <h2 class="text-white py-2"> Update </h2>
+                }
+                else
+                {
+                    <h2 class="text-white py-2"> Create </h2>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">
+            <input asp-for="Id" hidden />
+@*            <input asp-for="ImageUrl" hidden />*@
+            <div class="row">
+                <div class="col-10">
+                    <div class="border p-3">
+                        @*<div asp-validation-summary="ModelOnly"></div>*@
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Name" class="form-control border-0 shadow" />
+                            <label asp-for="Name" class="ms-2"></label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="Symbol" class="form-control border-0 shadow" />
+                            <label asp-for="Symbol" class="ms-2"></label>
+                            <span asp-validation-for="Symbol" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="NetPrice" class="form-control border-0 shadow" type="number" step="0.01" />
+                            <label asp-for="NetPrice" class="ms-2"></label>
+                            <span asp-validation-for="NetPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="GrossPrice" class="form-control border-0 shadow" type="number" step="0.01" />
+                            <label asp-for="GrossPrice" class="ms-2"></label>
+                            <span asp-validation-for="GrossPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="ShortDescription" class="form-control border-0 shadow" />
+                            <label asp-for="ShortDescription" class="ms-2"></label>
+                            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input asp-for="MeasureUnit" class="form-control border-0 shadow" />
+                            <label asp-for="MeasureUnit" class="ms-2"></label>
+                            <span asp-validation-for="MeasureUnit" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" asp-for="ActiveState" />
+                            <label class="form-check-label" asp-for="ActiveState">Active State</label>
+                            <!--<span asp-validation-for="EmailConfirmed" class="text-danger"></span>-->
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <label asp-for="VATRate" class="ms-2 p-0 custom-font">VAT Rate:</label>
+                            <select asp-for="VATRate" class="form-control border-0 shadow custom-font">
+                                <option value="NoneVAT">0%</option>
+                                <option value="LowVAT">5%</option>
+                                <option value="MediumVAT">8%</option>
+                                <option value="HugeVAT">23%</option>
+                            </select>
+                        </div>
+                        <div class="form-floating py-2 col-12">
+                            <input type="file" name="files" class="form-control border-0 shadow"accept="image/*" multiple/>
+                            <label asp-for="ProductImages" class="ms-2"></label>
+                        </div>
+
+                        <div class="form-floating py-2 col-12">
+                            <label asp-for="MainImageId" class="ms-2 p-0 custom-font">Main Image:</label>
+                            <select asp-for="MainImageId" class="form-control border-0 shadow custom-font">
+                                @foreach (var image in Model.ProductImages)
+                                {
+                                    <option value="@image.Id">Zdjęcie @(Model.ProductImages.IndexOf(image) + 1)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-12">
+                            <label asp-for="LongDescription" class="ms-2">Long Description:</label>
+                            <textarea id="LongDescription" name="LongDescription" class="form-control" rows="10">@Html.Raw(Model.LongDescription)</textarea>
+                            <span asp-validation-for="LongDescription" class="text-danger"></span>
+                        </div>
+
+
+
+                        <div class="row pt-2">
+                            <div class="col-6 col-md-3">
+                                @if (Model != null && Model.Id != null)
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Update</button>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary form-control">Create</button>
+                                }
+
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-primary border  form-control">
+                                    Back to List
+                                </a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-2">
+                    @if (Model != null && Model.ProductImages != null && Model.ProductImages.Count > 0)
+
+                    {
+                        foreach(var image in Model.ProductImages)
+                        {
+                            if(image != null)
+                            {
+                            <div class="border p-1 m-2 text-center">
+                             <img src="@image.ImageUrl" width="100%"
+                             style="border-radius:5px; border:1px solid #bbb" />
+                             <a asp-action="DeleteImage" class="btn btn-danger" asp-route-Id="@image.Id">
+                                 <i class="bi bi-trash-fill"></i>
+                                 Delete</a>
+                            </div>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <p>No images available for this product.</p>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+        <script>
+            CKEDITOR.replace('LongDescription');
+        </script>
+    }
+}
+

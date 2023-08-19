@@ -1,0 +1,29 @@
+﻿@using Order.Model.Models;
+@model User
+
+<form method="post" action="/User/Delete">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Delete User</h2>
+            <hr />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name" Disabled class="form-control" />
+        </div>
+
+        <!-- Ukryte pole Id -->
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-danger form-control">Delete</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="User" asp-action="Index" class="btn btn-secondary form-control">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</form>

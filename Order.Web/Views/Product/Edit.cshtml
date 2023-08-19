@@ -1,0 +1,94 @@
+﻿@using Order.Model.Models;
+@model Product
+
+<form method="post" action="/product/Editproduct">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Edit product</h2>
+            <hr />
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Name" class="p-0"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="NetPrice" class="p-0"></label>
+            <input asp-for="NetPrice" class="form-control" />
+            <span asp-validation-for="NetPrice" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="GrossPrice" class="p-0"></label>
+            <input asp-for="GrossPrice" class="form-control" />
+            <span asp-validation-for="GrossPrice" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Symbol" class="p-0"></label>
+            <input asp-for="Symbol" class="form-control" />
+            <span asp-validation-for="Symbol" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="ShortDescription" class="p-0"></label>
+            <input asp-for="ShortDescription" class="form-control" />
+            <span asp-validation-for="ShortDescription" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="LongDescription" class="p-0"></label>
+            <input asp-for="LongDescription" class="form-control" />
+            <span asp-validation-for="LongDescription" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="MeasureUnit" class="p-0"></label>
+            <input asp-for="MeasureUnit" class="form-control" />
+            <span asp-validation-for="MeasureUnit" class="text-danger"></span>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" asp-for="ActiveState" />
+            <label class="form-check-label" asp-for="ActiveState">Active State</label>
+            <!--<span asp-validation-for="EmailConfirmed" class="text-danger"></span>-->
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="VATRate" class="p-0">VAT Rate:</label>
+            <select asp-for="VATRate" class="form-control">
+                <option value="0%">0%</option>
+                <option value="5%">5%</option>
+                <option value="8%">8%</option>
+                <option value="23%">23%</option>
+            </select>
+        </div>
+        <div class="form-floating py-2 col-12">
+            <input type="file" name="files" class="form-control border-0 shadow" multiple />
+            <label asp-for="@Model.ProductImages" class="ms-2"></label>
+        </div>
+
+        
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Edit</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="product" asp-action="Index" class="btn btn-secondary form-control">
+                    Back to List
+                </a>
+            </div>
+        </div>
+        <div class="col-2">
+            @if (Model.ProductImages != null)
+            {
+                foreach (var image in Model.ProductImages)
+                {
+                    <div class="border p-1 m-2 text-center">
+                        <img src="@image.ImageUrl" width="100%"
+                             style="border-radius:5px; border:1px solid #bbb9b9" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</form>
